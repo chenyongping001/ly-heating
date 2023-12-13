@@ -1,6 +1,5 @@
 import prisma from "@/prisma/client";
-import { Button, Table } from "@radix-ui/themes";
-import React from "react";
+import { Badge, Table, Text } from "@radix-ui/themes";
 import StatusBadge from "../components/StatusBadge";
 
 const Rtdatapage = async () => {
@@ -19,7 +18,7 @@ const Rtdatapage = async () => {
           <Table.ColumnHeaderCell className="hidden md:table-cell">
             压力(MPa)
           </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>瞬时流量(t/h)</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>流量(t/h)</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell className="hidden md:table-cell">
             当日用量(T)
           </Table.ColumnHeaderCell>
@@ -38,10 +37,23 @@ const Rtdatapage = async () => {
               {row.rtu_address}
             </Table.Cell>
             <Table.Cell>
-              {row.user_name}
+              <div className="hidden md:table-cell">{row.user_name}</div>
+              <div className="block md:hidden">
+                <Badge>
+                  <Text size={"3"}>{row.user_name}</Text>
+                </Badge>
+              </div>
+
+              {
+                <div className="flex md:hidden">
+                  <StatusBadge label={row.alarmdes} status={row.comm_status} />
+                </div>
+              }
               {
                 <div className="block md:hidden">
-                  <StatusBadge label={row.alarmdes} status={row.comm_status} />
+                  <Badge color="gray">
+                    {row.time?.toLocaleString("zh-CN", { timeZone: "UTC" })}
+                  </Badge>
                 </div>
               }
             </Table.Cell>
@@ -49,12 +61,43 @@ const Rtdatapage = async () => {
             <Table.Cell className="hidden md:table-cell">
               {row.press}
             </Table.Cell>
-            <Table.Cell>{row.flow_m}</Table.Cell>
+            <Table.Cell>
+              {
+                <div>
+                  <div className="hidden md:table-cell">{row.flow_m}</div>
+                  <div className="block md:hidden">
+                    <Badge variant="outline">
+                      <Text size={"3"}>{row.flow_m}</Text>
+                    </Badge>
+                  </div>
+                  <div className="block md:hidden">
+                    <Badge>
+                      {"当日用量(T): "}
+                      {row.flow_m_day}
+                    </Badge>
+                  </div>
+                  <div className="block md:hidden">
+                    <Badge>
+                      {"温度(°C): "}
+                      {row.temp}
+                    </Badge>
+                  </div>
+                  <div className="block md:hidden">
+                    <Badge>
+                      {"压力(MPa): "}
+                      {row.press}
+                    </Badge>
+                  </div>
+                </div>
+              }
+            </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               {row.flow_m_day}
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              {row.time?.toLocaleString()}
+              <Badge color="gray">
+                {row.time?.toLocaleString("zh-CN", { timeZone: "UTC" })}
+              </Badge>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               <StatusBadge label={row.alarmdes} status={row.comm_status} />
@@ -66,4 +109,5 @@ const Rtdatapage = async () => {
   );
 };
 
+export const dynamic = "force-dynamic";
 export default Rtdatapage;
