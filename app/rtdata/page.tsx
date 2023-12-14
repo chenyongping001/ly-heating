@@ -56,6 +56,8 @@ const Rtdatapage = async ({ searchParams }: Props) => {
     ];
   const rtdata = await prisma.rtdata.findMany({
     where: {
+      rtu_address: { lt: 600 },
+      user_type: { equals: 1 },
       comm_status:
         status === "ALL"
           ? { gte: 0 }
