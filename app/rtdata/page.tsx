@@ -4,6 +4,7 @@ import Pagination from "../components/Pagination";
 import RtdataAction from "./RtdataAction";
 import RtdataTable, { RtdataQuery, columns } from "./RtdataTable";
 import RtdataSummary from "./RtdataSummary";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: RtdataQuery;
@@ -76,4 +77,8 @@ const Rtdatapage = async ({ searchParams }: Props) => {
 };
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "热网实时数据",
+  description: "监视热网实时数据",
+};
 export default Rtdatapage;
