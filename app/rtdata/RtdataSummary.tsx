@@ -13,7 +13,7 @@ const RtdataSummary = ({ rtFlowRate, accumulationDay }: Props) => {
   return (
     <Grid gap={"3"} columns={"2"}>
       {containers.map((container) => (
-        <Card>
+        <Card key={container.value}>
           <Text size={"1"} color="gray">
             {container.label}
           </Text>
