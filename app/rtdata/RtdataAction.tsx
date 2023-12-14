@@ -1,14 +1,13 @@
-import React from "react";
-import StatusFilter from "./StatusFilter";
+import { Flex, Grid } from "@radix-ui/themes";
 import GroupFilter from "./GroupFilter";
-import { Flex } from "@radix-ui/themes";
+import StatusFilter from "./StatusFilter";
 
 const RtdataAction = () => {
   return (
-    <Flex className="mb-2" gap={"3"}>
+    <Grid gap={"3"} columns={"2"}>
       <StatusFilter />
       <GroupFilter />
-    </Flex>
+    </Grid>
   );
 };
 

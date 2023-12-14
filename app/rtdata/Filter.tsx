@@ -17,28 +17,26 @@ const Filter = (props: Props) => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   return (
-    <div>
-      <Select.Root
-        defaultValue={params.get(props.filterName) || props.defaultValue}
-        onValueChange={(filterName) => {
-          params.set(props.filterName, filterName);
-          router.push("/rtdata?" + params.toString());
-        }}
-      >
-        <Select.Trigger />
-        <Select.Content>
-          <Select.Group>
-            <Select.Label>{props.showLabel}</Select.Label>
-            <Select.Separator />
-            {props.filterItems.map((filterItem) => (
-              <Select.Item key={filterItem.value} value={filterItem.value}>
-                {filterItem.label}
-              </Select.Item>
-            ))}
-          </Select.Group>
-        </Select.Content>
-      </Select.Root>
-    </div>
+    <Select.Root
+      defaultValue={params.get(props.filterName) || props.defaultValue}
+      onValueChange={(filterName) => {
+        params.set(props.filterName, filterName);
+        router.push("/rtdata?" + params.toString());
+      }}
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <Select.Group>
+          <Select.Label>{props.showLabel}</Select.Label>
+          <Select.Separator />
+          {props.filterItems.map((filterItem) => (
+            <Select.Item key={filterItem.value} value={filterItem.value}>
+              {filterItem.label}
+            </Select.Item>
+          ))}
+        </Select.Group>
+      </Select.Content>
+    </Select.Root>
   );
 };
 
