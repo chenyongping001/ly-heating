@@ -40,11 +40,30 @@ const Rtdatapage = async ({ searchParams }: Props) => {
     take: pageSize,
   });
 
+  const whereTotalUser = {
+    rtu_address: { lt: 600 },
+    user_type: { equals: 1 },
+  };
+
+  const rtFlowSum = await prisma.rtdata.aggregate({
+    where: whereTotalUser,
+    _sum: { flow_m: true },
+  });
+  const accumulationDaySum = await prisma.rtdata.aggregate({
+    where: whereTotalUser,
+    _sum: { flow_m_day: true },
+  });
+
   const rtdataCount = await prisma.rtdata.count({ where });
 
   return (
     <Flex direction={"column"} gap={"3"}>
-      <RtdataSummary rtFlowRate={333.56} accumulationDay={6789.77} />
+      <RtdataSummary
+        rtFlowRate={Math.round(rtFlowSum._sum.flow_m! * 100) / 100}
+        accumulationDay={
+          Math.round(accumulationDaySum._sum.flow_m_day! * 100) / 100
+        }
+      />
       <RtdataAction />
       <RtdataTable rtdata={rtdata} searchParams={searchParams} />
       <Pagination

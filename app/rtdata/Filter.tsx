@@ -24,7 +24,7 @@ const Filter = (props: Props) => {
         router.push("/rtdata?" + params.toString());
       }}
     >
-      <Select.Trigger />
+      <Select.Trigger radius="large" />
       <Select.Content>
         <Select.Group>
           <Select.Label>{props.showLabel}</Select.Label>
