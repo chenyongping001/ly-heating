@@ -2,31 +2,30 @@
 import { Select } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 
-const statuses: { value: string; label: string }[] = [
+const groupes: { value: string; label: string }[] = [
   { value: "ALL", label: "全部" },
-  { value: "0", label: "正常" },
-  { value: "1", label: "故障或停用" },
+  { value: "1", label: "热网总线" },
   { value: "2", label: "其他" },
 ];
-const StatusFilter = () => {
+const GroupFilter = () => {
   const router = useRouter();
   return (
     <div>
       <Select.Root
         defaultValue="ALL"
-        onValueChange={(status) => {
-          const searchParams = `?status=${status}`;
+        onValueChange={(group) => {
+          const searchParams = `?group=${group}`;
           router.push("/rtdata" + searchParams);
         }}
       >
         <Select.Trigger />
         <Select.Content>
           <Select.Group>
-            <Select.Label>站点状态</Select.Label>
+            <Select.Label>管线类别</Select.Label>
             <Select.Separator />
-            {statuses.map((status) => (
-              <Select.Item key={status.value} value={status.value}>
-                {status.label}
+            {groupes.map((group) => (
+              <Select.Item key={group.value} value={group.value}>
+                {group.label}
               </Select.Item>
             ))}
           </Select.Group>
@@ -36,4 +35,4 @@ const StatusFilter = () => {
   );
 };
 
-export default StatusFilter;
+export default GroupFilter;

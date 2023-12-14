@@ -2,35 +2,114 @@ import prisma from "@/prisma/client";
 import { Badge, Table, Text } from "@radix-ui/themes";
 import StatusBadge from "../components/StatusBadge";
 import RtdataAction from "./RtdataAction";
+import { rtdata } from "@prisma/client";
+import Link from "next/link";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 
-const Rtdatapage = async () => {
-  const rtdata = await prisma.rtdata.findMany();
+interface Props {
+  searchParams: {
+    status: string;
+    group: string;
+    orderBy: keyof rtdata;
+    type: "asc" | "desc";
+  };
+}
+const Rtdatapage = async ({ searchParams }: Props) => {
+  const { status = "ALL", group = "ALL" } = searchParams;
+  const columns: { label: string; value: keyof rtdata; className?: string }[] =
+    [
+      {
+        label: "站号",
+        value: "rtu_address",
+        className: "hidden md:table-cell",
+      },
+      { label: "用汽单位", value: "user_name" },
+      {
+        label: "温度(°C)",
+        value: "temp",
+        className: "hidden md:table-cell",
+      },
+      {
+        label: "压力(MPa)",
+        value: "press",
+        className: "hidden md:table-cell",
+      },
+      {
+        label: "流量(t/h)",
+        value: "flow_m",
+      },
+      {
+        label: "当日用量(T)",
+        value: "flow_m_day",
+        className: "hidden md:table-cell",
+      },
+      {
+        label: "时间",
+        value: "time",
+        className: "hidden md:table-cell",
+      },
+      {
+        label: "报警提示",
+        value: "alarmdes",
+        className: "hidden md:table-cell",
+      },
+    ];
+  const rtdata = await prisma.rtdata.findMany({
+    where: {
+      comm_status:
+        status === "ALL"
+          ? { gte: 0 }
+          : parseInt(status) < 2
+          ? { equals: parseInt(status) }
+          : { gte: 2 },
+      group_id:
+        group === "ALL"
+          ? { gte: 0 }
+          : parseInt(group) < 2
+          ? { equals: parseInt(group) }
+          : { gte: 2 },
+    },
+    orderBy: columns
+      .map((column) => column.value)
+      .includes(searchParams.orderBy)
+      ? { [searchParams.orderBy]: searchParams.type }
+      : undefined,
+  });
+
   return (
     <div>
       <RtdataAction />
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              站号
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>用汽单位</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              温度(°C)
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              压力(MPa)
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>流量(t/h)</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              当日用量(T)
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              时间
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              报警提示
-            </Table.ColumnHeaderCell>
+            {columns.map((column) => (
+              <Table.ColumnHeaderCell
+                key={column.value}
+                className={column.className}
+              >
+                <Link
+                  href={{
+                    query: {
+                      ...searchParams,
+                      orderBy: column.value,
+                      type:
+                        searchParams.orderBy === column.value &&
+                        searchParams.type === "desc"
+                          ? "asc"
+                          : "desc",
+                    },
+                  }}
+                >
+                  {column.label}
+                </Link>
+                {column.value === searchParams.orderBy &&
+                  (searchParams.type === "asc" ? (
+                    <ArrowUpIcon className="inline" />
+                  ) : (
+                    <ArrowDownIcon className="inline" />
+                  ))}
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
