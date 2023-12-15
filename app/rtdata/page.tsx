@@ -1,10 +1,9 @@
 import prisma from "@/prisma/client";
 import { Flex } from "@radix-ui/themes";
-import Pagination from "../components/Pagination";
-import RtdataAction from "./RtdataAction";
-import RtdataTable, { RtdataQuery, columns } from "./RtdataTable";
-import RtdataSummary from "./RtdataSummary";
 import { Metadata } from "next";
+import RtdataAction from "./RtdataAction";
+import RtdataSummary from "./RtdataSummary";
+import RtdataTable, { RtdataQuery, columns } from "./RtdataTable";
 
 interface Props {
   searchParams: RtdataQuery;
@@ -15,11 +14,8 @@ const Rtdatapage = async ({ searchParams }: Props) => {
     return <p>不支持当前环境！</p>;
 
   const { status = "ALL", group = "ALL" } = searchParams;
-  const pageSize = 10;
-  const page = parseInt(searchParams.page) || 1;
   const where = {
     rtu_address: { lt: 600 },
-    user_type: { equals: 1 },
     comm_status:
       status === "ALL"
         ? { gte: 0 }
@@ -40,8 +36,6 @@ const Rtdatapage = async ({ searchParams }: Props) => {
       .includes(searchParams.orderBy)
       ? { [searchParams.orderBy]: searchParams.type }
       : undefined,
-    skip: (page - 1) * pageSize,
-    take: pageSize,
   });
 
   const whereTotalUser = {
@@ -58,8 +52,6 @@ const Rtdatapage = async ({ searchParams }: Props) => {
     _sum: { flow_m_day: true },
   });
 
-  const rtdataCount = await prisma.rtdata.count({ where });
-
   return (
     <Flex direction={"column"} gap={"3"}>
       <RtdataSummary
@@ -70,11 +62,6 @@ const Rtdatapage = async ({ searchParams }: Props) => {
       />
       <RtdataAction />
       <RtdataTable rtdata={rtdata} searchParams={searchParams} />
-      <Pagination
-        currentPage={page}
-        itemCount={rtdataCount}
-        pageSize={pageSize}
-      />
     </Flex>
   );
 };

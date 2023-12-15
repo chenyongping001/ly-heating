@@ -9,7 +9,6 @@ export interface RtdataQuery {
   group: string;
   orderBy: keyof rtdata;
   type: "asc" | "desc";
-  page: string;
 }
 
 interface Props {
@@ -24,9 +23,8 @@ export const columns: {
   {
     label: "站号",
     value: "rtu_address",
-    className: "hidden md:table-cell",
   },
-  { label: "用汽单位", value: "user_name" },
+  { label: "用汽单位", value: "user_name", className: "hidden md:table-cell" },
   {
     label: "温度(°C)",
     value: "temp",
@@ -96,29 +94,30 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
       <Table.Body>
         {rtdata.map((row) => (
           <Table.Row key={row.id}>
-            <Table.Cell className="hidden md:table-cell">
-              {row.rtu_address}
-            </Table.Cell>
             <Table.Cell>
-              <div className="hidden md:table-cell">{row.user_name}</div>
-              <div className="block md:hidden">
+              <div className="hidden md:table-cell">{row.rtu_address}</div>
+              <div className="block md:hidden mb-1">
                 <Badge>
                   <Text size={"3"}>{row.user_name}</Text>
                 </Badge>
               </div>
 
               {
-                <div className="flex md:hidden">
+                <div className="flex md:hidden gap-1">
+                  <Badge>{row.rtu_address}</Badge>
                   <StatusBadge label={row.alarmdes} status={row.comm_status} />
                 </div>
               }
               {
-                <div className="block md:hidden">
+                <div className="block md:hidden mt-1">
                   <Badge color="gray">
                     {row.time?.toLocaleString("zh-CN", { timeZone: "UTC" })}
                   </Badge>
                 </div>
               }
+            </Table.Cell>
+            <Table.Cell className="hidden md:table-cell">
+              {row.user_name}
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">{row.temp}</Table.Cell>
             <Table.Cell className="hidden md:table-cell">
@@ -128,7 +127,7 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
               {
                 <div>
                   <div className="hidden md:table-cell">{row.flow_m}</div>
-                  <div className="block md:hidden">
+                  <div className="block md:hidden mb-1">
                     <Badge variant="outline">
                       <Text size={"3"}>{row.flow_m}</Text>
                     </Badge>

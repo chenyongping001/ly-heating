@@ -1,4 +1,4 @@
-import { Flex, Grid } from "@radix-ui/themes";
+import { Grid } from "@radix-ui/themes";
 import GroupFilter from "./GroupFilter";
 import StatusFilter from "./StatusFilter";
 
