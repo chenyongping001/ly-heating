@@ -11,6 +11,9 @@ interface Props {
 }
 
 const Rtdatapage = async ({ searchParams }: Props) => {
+  if (!/wxwork/i.test(JSON.stringify(searchParams)))
+    return <p>不支持当前环境！</p>;
+
   const { status = "ALL", group = "ALL" } = searchParams;
   const pageSize = 10;
   const page = parseInt(searchParams.page) || 1;
