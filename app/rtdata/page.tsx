@@ -6,6 +6,7 @@ import RtdataSummary from "./RtdataSummary";
 import RtdataTable, { RtdataQuery, columns } from "./RtdataTable";
 import { convertDateToString } from "@/utilite";
 import Link from "next/link";
+import Copyright from "../components/Copyright";
 
 interface Props {
   searchParams: RtdataQuery;
@@ -53,17 +54,23 @@ const Rtdatapage = async ({ searchParams }: Props) => {
   };
 
   const today = {
-    gte: new Date(new Date().setUTCHours(0, 0, 0, 0)),
-    lte: new Date(new Date().setUTCHours(23, 59, 59, 999)),
+    gte: new Date(
+      new Date(+new Date() + 8 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
+    ),
+    lte: new Date(
+      new Date(+new Date() + 8 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
+    ),
   };
   const yesterday = {
     gte: new Date(
-      new Date(+new Date() - 24 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
+      new Date(+new Date() - 16 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
     ),
     lte: new Date(
-      new Date(+new Date() - 24 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
+      new Date(+new Date() - 16 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
     ),
   };
+
+  console.log(new Date());
 
   try {
     const rtdata = await prisma.rtdata.findMany({
@@ -134,6 +141,7 @@ const Rtdatapage = async ({ searchParams }: Props) => {
         />
         <RtdataAction />
         <RtdataTable rtdata={rtdata} searchParams={searchParams} />
+        <Copyright />
       </Flex>
     );
   } catch (error) {
