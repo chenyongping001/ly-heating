@@ -21,7 +21,7 @@ const Filter = (props: Props) => {
       defaultValue={params.get(props.filterName) || props.defaultValue}
       onValueChange={(filterName) => {
         params.set(props.filterName, filterName);
-        router.push("/rtdata?" + params.toString());
+        router.push("/rtdata/?" + params.toString());
       }}
     >
       <Select.Trigger radius="large" />

@@ -7,6 +7,7 @@ import StatusBadge from "../components/StatusBadge";
 export interface RtdataQuery {
   status: string;
   group: string;
+  search: string;
   orderBy: keyof rtdata;
   type: "asc" | "desc";
 }

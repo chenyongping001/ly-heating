@@ -1,5 +1,6 @@
-import RtdataSummary from "./rtdata/RtdataSummary";
+"use client";
+import Search from "./rtdata/Search";
 
 export default function Home() {
-  return <RtdataSummary rtFlowRate={340.5} accumulationDay={7789.09} />;
+  return <Search />;
 }
