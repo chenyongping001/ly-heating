@@ -1,30 +1,75 @@
 import { Badge, Card, Flex, Grid, Text } from "@radix-ui/themes";
-import StatusFilter from "./StatusFilter";
-import GroupFilter from "./GroupFilter";
 interface Props {
-  rtFlowRate: number;
+  rtFlowReal: number;
+  rtFlowPeakToday: number;
+  rtFlowPeakTodayAt: string;
+  rtFlowPeakYesterday: number;
+  rtFlowPeakYesterdayAt: string;
   accumulationDay: number;
+  accumulationYesterday: number;
 }
-const RtdataSummary = ({ rtFlowRate, accumulationDay }: Props) => {
-  const containers: { label: string; value: number }[] = [
-    { label: "实时流量(t/h)", value: rtFlowRate },
-    { label: "日累积(T)", value: accumulationDay },
+const RtdataSummary = ({
+  rtFlowReal,
+  rtFlowPeakToday,
+  rtFlowPeakTodayAt,
+  rtFlowPeakYesterday,
+  rtFlowPeakYesterdayAt,
+  accumulationDay,
+  accumulationYesterday,
+}: Props) => {
+  const containers: {
+    label: string;
+    value: number;
+    occurTime?: string;
+  }[] = [
+    { label: "实时流量(t/h)", value: rtFlowReal },
+    {
+      label: "今日峰值(t/h)",
+      value: rtFlowPeakToday,
+      occurTime: rtFlowPeakTodayAt,
+    },
+    {
+      label: "昨日峰值(t/h)",
+      value: rtFlowPeakYesterday,
+      occurTime: rtFlowPeakYesterdayAt,
+    },
   ];
   return (
-    <Grid gap={"3"} columns={"2"}>
-      {containers.map((container) => (
-        <Card key={container.value}>
-          <Text size={"1"} color="gray">
-            {container.label}
-          </Text>
-          <Badge variant="solid" ml={"2"}>
-            <Text size={"4"} weight={"bold"}>
-              {container.value}
+    <Flex direction={"column"} gap={"2"}>
+      <Grid gap={"2"} columns={"3"}>
+        {containers.map((container) => (
+          <Card key={container.label} variant="surface">
+            <Flex direction={"column"} gap="1">
+              <Text className="text-xs font-medium">{container.label}</Text>
+              <Text size="5" className="font-bold items-center">
+                {container.value}
+              </Text>
+              <Text size={"1"} color="gray">
+                {container.occurTime}
+              </Text>
+            </Flex>
+          </Card>
+        ))}
+      </Grid>
+      <Grid gap={"2"} columns={"2"}>
+        <Card variant="surface">
+          <Flex direction={"column"} gap="1">
+            <Text className="text-xs font-medium">{"今日累积(T)"}</Text>
+            <Text size="5" className="font-bold items-center">
+              {accumulationDay}
             </Text>
-          </Badge>
+          </Flex>
         </Card>
-      ))}
-    </Grid>
+        <Card variant="surface">
+          <Flex direction={"column"} gap="1">
+            <Text className="text-xs font-medium">{"昨日总量(T)"}</Text>
+            <Text size="5" className="font-bold items-center">
+              {accumulationYesterday}
+            </Text>
+          </Flex>
+        </Card>
+      </Grid>
+    </Flex>
   );
 };
 export default RtdataSummary;

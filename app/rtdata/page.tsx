@@ -1,10 +1,11 @@
 import prisma from "@/prisma/client";
 import { Flex } from "@radix-ui/themes";
 import { Metadata } from "next";
-import Link from "next/link";
 import RtdataAction from "./RtdataAction";
 import RtdataSummary from "./RtdataSummary";
 import RtdataTable, { RtdataQuery, columns } from "./RtdataTable";
+import { convertDateToString } from "@/utilite";
+import Link from "next/link";
 
 interface Props {
   searchParams: RtdataQuery;
@@ -40,19 +41,34 @@ const Rtdatapage = async ({ searchParams }: Props) => {
       },
     ],
   };
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: searchParams.type }
+    : undefined;
 
   const whereTotalUser = {
     rtu_address: { lt: 600 },
     user_type: { equals: 1 },
   };
+
+  const today = {
+    gte: new Date(new Date().setUTCHours(0, 0, 0, 0)),
+    lte: new Date(new Date().setUTCHours(23, 59, 59, 999)),
+  };
+  const yesterday = {
+    gte: new Date(
+      new Date(+new Date() - 24 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
+    ),
+    lte: new Date(
+      new Date(+new Date() - 24 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
+    ),
+  };
+
   try {
     const rtdata = await prisma.rtdata.findMany({
       where,
-      orderBy: columns
-        .map((column) => column.value)
-        .includes(searchParams.orderBy)
-        ? { [searchParams.orderBy]: searchParams.type }
-        : undefined,
+      orderBy,
     });
     const rtFlowSum = await prisma.rtdata.aggregate({
       where: whereTotalUser,
@@ -63,12 +79,57 @@ const Rtdatapage = async ({ searchParams }: Props) => {
       _sum: { flow_m_day: true },
     });
 
+    const accumulationYesterday = await prisma.useDailyReport.aggregate({
+      where: {
+        ReportDate: {
+          equals: new Date(+new Date() - 16 * 3600 * 1000)
+            .toISOString()
+            .substring(0, 10),
+        },
+      },
+      _sum: { DailyFlow: true },
+    });
+
+    const rtFlowPeakYesterday = await prisma.chanelLost.groupBy({
+      by: ["update_time"],
+      where: {
+        update_time: yesterday,
+      },
+      _sum: { useTotal: true },
+      orderBy: { _sum: { useTotal: "desc" } },
+      take: 1,
+    });
+    const rtFlowPeakToday = await prisma.chanelLost.groupBy({
+      by: ["update_time"],
+      where: {
+        update_time: today,
+      },
+      _sum: { useTotal: true },
+      orderBy: { _sum: { useTotal: "desc" } },
+      take: 1,
+    });
+
     return (
-      <Flex direction={"column"} gap={"3"}>
+      <Flex direction={"column"} gap={"2"}>
         <RtdataSummary
-          rtFlowRate={Math.round(rtFlowSum._sum.flow_m! * 100) / 100}
+          rtFlowReal={Math.round(rtFlowSum._sum.flow_m! * 100) / 100}
+          rtFlowPeakToday={
+            Math.round(rtFlowPeakToday[0]._sum.useTotal! * 100) / 100
+          }
+          rtFlowPeakTodayAt={convertDateToString(
+            rtFlowPeakToday[0].update_time
+          )}
+          rtFlowPeakYesterday={
+            Math.round(rtFlowPeakYesterday[0]._sum.useTotal! * 100) / 100
+          }
+          rtFlowPeakYesterdayAt={convertDateToString(
+            rtFlowPeakYesterday[0].update_time
+          )}
           accumulationDay={
             Math.round(accumulationDaySum._sum.flow_m_day! * 100) / 100
+          }
+          accumulationYesterday={
+            Math.round(accumulationYesterday._sum.DailyFlow! * 100) / 100
           }
         />
         <RtdataAction />
@@ -76,7 +137,13 @@ const Rtdatapage = async ({ searchParams }: Props) => {
       </Flex>
     );
   } catch (error) {
-    return <Link href={"/rtdata"}>重试</Link>;
+    return (
+      <div>
+        <p>发生了以下错误：</p>
+        <p>{(error as Error).message}</p>
+        <Link href={"/rtdata"}>重试</Link>
+      </div>
+    );
   }
 };
 

@@ -17,10 +17,11 @@ const Search = () => {
           onChange={(event) => setSearch(event.target.value.trim())}
         ></TextField.Input>
         <TextField.Slot>
-          <Flex gap={"3"}>
+          <Flex gap={"5"}>
             <Button
               variant="ghost"
               color="indigo"
+              size={"3"}
               onClick={() => {
                 params.set("search", search);
                 router.push("/rtdata/?" + params.toString());
@@ -30,7 +31,8 @@ const Search = () => {
             </Button>
             <Button
               variant="ghost"
-              color="gray"
+              size={"3"}
+              color="gold"
               onClick={() => {
                 setSearch("");
                 params.delete("search");

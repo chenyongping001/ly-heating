@@ -48,3 +48,38 @@ model rtdata {
   alarm_on      Int
   switchalarm   Int
 }
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model chanelLost {
+  update_time  DateTime @db.DateTime
+  groupId      Int
+  useTotal     Float    @db.Real
+  supplyTotal  Float    @db.Real
+  press        Float    @db.Real
+  press1       Float    @db.Real
+  press2       Float    @db.Real
+  temp         Float    @db.Real
+  temp1        Float    @db.Real
+  temp2        Float    @db.Real
+  tempa        Float    @db.Real
+  pressa       Float    @db.Real
+  UserTotal_JJ Float?   @db.Real
+  UserTotal_LH Float?   @db.Real
+  temp478      Float?   @db.Real
+  temp630      Float?   @db.Real
+  temp_park    Float?   @db.Real
+  press478     Float?   @db.Real
+  press630     Float?   @db.Real
+  press_park   Float?   @db.Real
+
+  @@id([update_time, groupId])
+}
+
+model UseDailyReport {
+  UseDailyReportId BigInt @id(map: "PK_DailyReport") @default(autoincrement())
+  UserId           Int
+  UserName         String @db.VarChar(64)
+  DailyFlow        Float  @db.Real
+  TotalFlow        Float  @db.Real
+  ReportDate       String @db.VarChar(50)
+}
