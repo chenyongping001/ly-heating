@@ -70,8 +70,6 @@ const Rtdatapage = async ({ searchParams }: Props) => {
     ),
   };
 
-  console.log(new Date());
-
   try {
     const rtdata = await prisma.rtdata.findMany({
       where,

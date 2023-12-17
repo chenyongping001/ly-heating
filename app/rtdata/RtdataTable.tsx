@@ -98,22 +98,20 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
             <Table.Cell>
               <div className="hidden md:table-cell">{row.rtu_address}</div>
               <div className="block md:hidden mb-1">
-                <Badge>
-                  <Text size={"3"}>{row.user_name}</Text>
-                </Badge>
+                <Text size={"3"}>{row.user_name}</Text>
               </div>
 
               {
                 <div className="flex md:hidden gap-1">
-                  <Badge>{row.rtu_address}</Badge>
+                  {row.rtu_address}
                   <StatusBadge label={row.alarmdes} status={row.comm_status} />
                 </div>
               }
               {
                 <div className="block md:hidden mt-1">
-                  <Badge color="gray">
+                  <Text size={"1"} color="gray">
                     {row.time?.toLocaleString("zh-CN", { timeZone: "UTC" })}
-                  </Badge>
+                  </Text>
                 </div>
               }
             </Table.Cell>
@@ -129,27 +127,25 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
                 <div>
                   <div className="hidden md:table-cell">{row.flow_m}</div>
                   <div className="block md:hidden mb-1">
-                    <Badge variant="outline">
-                      <Text size={"3"}>{row.flow_m}</Text>
-                    </Badge>
+                    <Text size={"3"}>{row.flow_m}</Text>
                   </div>
                   <div className="block md:hidden">
-                    <Badge>
+                    <Text size={"1"} color="gray">
                       {"当日用量(T): "}
-                      {row.flow_m_day}
-                    </Badge>
+                    </Text>
+                    {row.flow_m_day}
                   </div>
                   <div className="block md:hidden">
-                    <Badge>
+                    <Text size={"1"} color="gray">
                       {"温度(°C): "}
-                      {row.temp}
-                    </Badge>
+                    </Text>
+                    {row.temp}
                   </div>
                   <div className="block md:hidden">
-                    <Badge>
+                    <Text size={"1"} color="gray">
                       {"压力(MPa): "}
-                      {row.press}
-                    </Badge>
+                    </Text>
+                    {row.press}
                   </div>
                 </div>
               }
@@ -158,9 +154,9 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
               {row.flow_m_day}
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              <Badge color="gray">
+              <Text color="gray">
                 {row.time?.toLocaleString("zh-CN", { timeZone: "UTC" })}
-              </Badge>
+              </Text>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               <StatusBadge label={row.alarmdes} status={row.comm_status} />
