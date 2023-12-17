@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import RtdataAction from "./RtdataAction";
 import RtdataSummary from "./RtdataSummary";
 import RtdataTable, { RtdataQuery, columns } from "./RtdataTable";
-import { convertDateToString } from "@/utilite";
+import { convertDateToString, keep2Dec } from "@/utilite";
 import Link from "next/link";
 import Copyright from "../components/Copyright";
 
@@ -117,25 +117,19 @@ const Rtdatapage = async ({ searchParams }: Props) => {
     return (
       <Flex direction={"column"} gap={"2"}>
         <RtdataSummary
-          rtFlowReal={Math.round(rtFlowSum._sum.flow_m! * 100) / 100}
-          rtFlowPeakToday={
-            Math.round(rtFlowPeakToday[0]._sum.useTotal! * 100) / 100
-          }
+          rtFlowReal={keep2Dec(rtFlowSum._sum.flow_m!)}
+          rtFlowPeakToday={keep2Dec(rtFlowPeakToday[0]._sum.useTotal!)}
           rtFlowPeakTodayAt={convertDateToString(
             rtFlowPeakToday[0].update_time
           )}
-          rtFlowPeakYesterday={
-            Math.round(rtFlowPeakYesterday[0]._sum.useTotal! * 100) / 100
-          }
+          rtFlowPeakYesterday={keep2Dec(rtFlowPeakYesterday[0]._sum.useTotal!)}
           rtFlowPeakYesterdayAt={convertDateToString(
             rtFlowPeakYesterday[0].update_time
           )}
-          accumulationDay={
-            Math.round(accumulationDaySum._sum.flow_m_day! * 100) / 100
-          }
-          accumulationYesterday={
-            Math.round(accumulationYesterday._sum.DailyFlow! * 100) / 100
-          }
+          accumulationDay={keep2Dec(accumulationDaySum._sum.flow_m_day!)}
+          accumulationYesterday={keep2Dec(
+            accumulationYesterday._sum.DailyFlow!
+          )}
         />
         <RtdataAction />
         <RtdataTable rtdata={rtdata} searchParams={searchParams} />

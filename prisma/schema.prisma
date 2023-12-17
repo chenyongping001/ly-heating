@@ -9,44 +9,18 @@ datasource db {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model rtdata {
-  id            Int       @id @default(autoincrement())
-  time          DateTime? @db.DateTime
-  year          Int       @db.SmallInt
-  month         Int       @db.TinyInt
-  day           Int       @db.TinyInt
-  user_id       Int       @db.TinyInt
-  user_name     String    @db.VarChar(64)
-  user_key      String    @db.VarChar(50)
-  rtu_address   Int       @db.SmallInt
-  gprs_id       String    @db.VarChar(50)
-  user_type     Int       @db.TinyInt
-  user_status   Int       @db.TinyInt
-  group_id      Int       @db.TinyInt
-  group_name    String    @db.VarChar(64)
-  group_address Int       @db.TinyInt
-  comm_status   Int       @db.TinyInt
-  alarmdes      String    @db.VarChar(1024)
-  temp          Float     @db.Real
-  press         Float     @db.Real
-  dpress        Float     @db.Real
-  flow_m        Float     @db.Real
-  flow_m_total  Float
-  flow_m_day    Float
-  flow_q        Float     @db.Real
-  flow_q_total  Float     @db.Real
-  density       Float     @db.Real
-  balance       Float     @db.Real
-  runtime       Float     @db.Real
-  worktime      Float     @db.Real
-  PowerLoseTime Float     @db.Real
-  alarm_no      Int
-  Month_Use     Float     @db.Real
-  Year_Use      Float     @db.Real
-  isshow        Boolean
-  isOpen        String?   @db.VarChar(10)
-  user_area     Int?      @db.SmallInt
-  alarm_on      Int
-  switchalarm   Int
+  id          Int       @id @default(autoincrement())
+  time        DateTime? @db.DateTime
+  user_name   String    @db.VarChar(64)
+  rtu_address Int       @db.SmallInt
+  user_type   Int       @db.TinyInt
+  group_id    Int       @db.TinyInt
+  comm_status Int       @db.TinyInt
+  alarmdes    String    @db.VarChar(1024)
+  temp        Float     @db.Real
+  press       Float     @db.Real
+  flow_m      Float     @db.Real
+  flow_m_day  Float
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

@@ -1,6 +1,6 @@
 import { rtdata } from "@prisma/client";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
-import { Badge, Table, Text } from "@radix-ui/themes";
+import { Table, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import StatusBadge from "../components/StatusBadge";
 
@@ -11,7 +11,6 @@ export interface RtdataQuery {
   orderBy: keyof rtdata;
   type: "asc" | "desc";
 }
-
 interface Props {
   searchParams: RtdataQuery;
   rtdata: rtdata[];
