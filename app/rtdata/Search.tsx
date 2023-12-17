@@ -20,7 +20,7 @@ const Search = () => {
           <Flex gap={"5"}>
             <Button
               variant="ghost"
-              color="indigo"
+              color="gray"
               size={"3"}
               onClick={() => {
                 params.set("search", search);
@@ -31,8 +31,8 @@ const Search = () => {
             </Button>
             <Button
               variant="ghost"
+              color="gray"
               size={"3"}
-              color="gold"
               onClick={() => {
                 setSearch("");
                 params.delete("search");
