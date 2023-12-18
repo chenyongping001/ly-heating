@@ -1,12 +1,12 @@
 import prisma from "@/prisma/client";
+import { convertDateToString, keep2Dec } from "@/utilite";
 import { Flex } from "@radix-ui/themes";
 import { Metadata } from "next";
+import Link from "next/link";
+import Copyright from "../components/Copyright";
 import RtdataAction from "./RtdataAction";
 import RtdataSummary from "./RtdataSummary";
 import RtdataTable, { RtdataQuery, columns } from "./RtdataTable";
-import { convertDateToString, keep2Dec } from "@/utilite";
-import Link from "next/link";
-import Copyright from "../components/Copyright";
 
 interface Props {
   searchParams: RtdataQuery;
@@ -83,18 +83,10 @@ const Rtdatapage = async ({ searchParams }: Props) => {
       where: whereTotalUser,
       _sum: { flow_m_day: true },
     });
-
-    const accumulationYesterday = await prisma.useDailyReport.aggregate({
-      where: {
-        ReportDate: {
-          equals: new Date(+new Date() - 16 * 3600 * 1000)
-            .toISOString()
-            .substring(0, 10),
-        },
-      },
-      _sum: { DailyFlow: true },
+    const accumulationYesterday = await prisma.rtdata.aggregate({
+      where: whereTotalUser,
+      _sum: { Month_Use: true },
     });
-
     const rtFlowPeakYesterday = await prisma.chanelLost.groupBy({
       by: ["update_time"],
       where: {
@@ -128,7 +120,7 @@ const Rtdatapage = async ({ searchParams }: Props) => {
           )}
           accumulationDay={keep2Dec(accumulationDaySum._sum.flow_m_day!)}
           accumulationYesterday={keep2Dec(
-            accumulationYesterday._sum.DailyFlow!
+            accumulationYesterday._sum.Month_Use!
           )}
         />
         <RtdataAction />

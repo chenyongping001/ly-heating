@@ -36,12 +36,22 @@ export const columns: {
     className: "hidden md:table-cell",
   },
   {
+    label: "频率(Hz)",
+    value: "dpress",
+    className: "hidden md:table-cell",
+  },
+  {
     label: "流量(t/h)",
     value: "flow_m",
   },
   {
     label: "当日用量(T)",
     value: "flow_m_day",
+    className: "hidden md:table-cell",
+  },
+  {
+    label: "昨日用量(T)",
+    value: "Month_Use",
     className: "hidden md:table-cell",
   },
   {
@@ -99,20 +109,23 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
               <div className="block md:hidden mb-1">
                 <Text size={"3"}>{row.user_name}</Text>
               </div>
+              <div className="flex md:hidden gap-1">
+                {row.rtu_address}
+                <StatusBadge label={row.alarmdes} status={row.comm_status} />
+              </div>
 
-              {
-                <div className="flex md:hidden gap-1">
-                  {row.rtu_address}
-                  <StatusBadge label={row.alarmdes} status={row.comm_status} />
-                </div>
-              }
-              {
-                <div className="block md:hidden mt-1">
-                  <Text size={"1"} color="gray">
-                    {row.time?.toLocaleString("zh-CN", { timeZone: "UTC" })}
-                  </Text>
-                </div>
-              }
+              <div className="block md:hidden mt-1">
+                <Text size={"1"} color="gray">
+                  {"当日用量(T): "}
+                </Text>
+                {row.flow_m_day}
+              </div>
+              <div className="block md:hidden">
+                <Text size={"1"} color="gray">
+                  {"昨日用量(T): "}
+                </Text>
+                {row.Month_Use}
+              </div>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               {row.user_name}
@@ -121,6 +134,9 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
             <Table.Cell className="hidden md:table-cell">
               {row.press}
             </Table.Cell>
+            <Table.Cell className="hidden md:table-cell">
+              {row.dpress}
+            </Table.Cell>
             <Table.Cell>
               {
                 <div>
@@ -128,12 +144,7 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
                   <div className="block md:hidden mb-1">
                     <Text size={"3"}>{row.flow_m}</Text>
                   </div>
-                  <div className="block md:hidden">
-                    <Text size={"1"} color="gray">
-                      {"当日用量(T): "}
-                    </Text>
-                    {row.flow_m_day}
-                  </div>
+
                   <div className="block md:hidden">
                     <Text size={"1"} color="gray">
                       {"温度(°C): "}
@@ -146,11 +157,25 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
                     </Text>
                     {row.press}
                   </div>
+                  <div className="block md:hidden">
+                    <Text size={"1"} color="gray">
+                      {"频率(Hz): "}
+                    </Text>
+                    {row.dpress}
+                  </div>
+                  <div className="block md:hidden mt-1">
+                    <Text className="font-thin text-gray-400 text-xs">
+                      {row.time?.toLocaleString("zh-CN", { timeZone: "UTC" })}
+                    </Text>
+                  </div>
                 </div>
               }
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               {row.flow_m_day}
+            </Table.Cell>
+            <Table.Cell className="hidden md:table-cell">
+              {row.Month_Use}
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               <Text color="gray">

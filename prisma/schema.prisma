@@ -19,8 +19,10 @@ model rtdata {
   alarmdes    String    @db.VarChar(1024)
   temp        Float     @db.Real
   press       Float     @db.Real
+  dpress      Float     @db.Real
   flow_m      Float     @db.Real
-  flow_m_day  Float
+  flow_m_day  Float     @db.Real
+  Month_Use   Float     @db.Real
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -47,13 +49,4 @@ model chanelLost {
   press_park   Float?   @db.Real
 
   @@id([update_time, groupId])
-}
-
-model UseDailyReport {
-  UseDailyReportId BigInt @id(map: "PK_DailyReport") @default(autoincrement())
-  UserId           Int
-  UserName         String @db.VarChar(64)
-  DailyFlow        Float  @db.Real
-  TotalFlow        Float  @db.Real
-  ReportDate       String @db.VarChar(50)
 }
