@@ -28,7 +28,7 @@ const RtdataTable = ({ searchParams, where, orderBy }: Props) => {
       .finally(() => {
         setTimeout(() => setRefreshToken(Math.random()), 3000);
       });
-  }, [refreshToken]);
+  }, [refreshToken, where, orderBy]);
 
   return (
     <Table.Root variant="surface">

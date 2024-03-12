@@ -5,6 +5,7 @@ import RtdataAction from "./RtdataAction";
 import RtdataSummary from "./RtdataSummary";
 import RtdataTable from "./RtdataTable";
 import { columns } from "./columns";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: RtdataQuery;
@@ -67,9 +68,9 @@ const Rtdatapage = async ({ searchParams }: Props) => {
   );
 };
 
-// export const dynamic = "force-dynamic";
-// export const metadata: Metadata = {
-//   title: "热网实时数据",
-//   description: "监视热网实时数据",
-// };
+export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "热网实时数据",
+  description: "监视热网实时数据",
+};
 export default Rtdatapage;
