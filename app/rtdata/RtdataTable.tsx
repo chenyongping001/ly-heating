@@ -1,72 +1,35 @@
+"use client";
 import { rtdata } from "@prisma/client";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Table, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import StatusBadge from "../components/StatusBadge";
+import { useEffect, useState } from "react";
+import { getRtTableData } from "../actions";
+import { RtdataQuery } from "./page";
+import { columns } from "./columns";
 
-export interface RtdataQuery {
-  status: string;
-  group: string;
-  search: string;
-  orderBy: keyof rtdata;
-  type: "asc" | "desc";
-}
 interface Props {
   searchParams: RtdataQuery;
-  rtdata: rtdata[];
+  where: any;
+  orderBy: any;
 }
-export const columns: {
-  label: string;
-  value: keyof rtdata;
-  className?: string;
-}[] = [
-  {
-    label: "站号",
-    value: "rtu_address",
-  },
-  { label: "用汽单位", value: "user_name", className: "hidden md:table-cell" },
-  {
-    label: "温度(°C)",
-    value: "temp",
-    className: "hidden md:table-cell",
-  },
-  {
-    label: "压力(MPa)",
-    value: "press",
-    className: "hidden md:table-cell",
-  },
-  {
-    label: "频率(Hz)",
-    value: "dpress",
-    className: "hidden md:table-cell",
-  },
-  {
-    label: "流量(t/h)",
-    value: "flow_m",
-  },
-  {
-    label: "当日用量(T)",
-    value: "flow_m_day",
-    className: "hidden md:table-cell",
-  },
-  {
-    label: "昨日用量(T)",
-    value: "Month_Use",
-    className: "hidden md:table-cell",
-  },
-  {
-    label: "时间",
-    value: "time",
-    className: "hidden md:table-cell",
-  },
-  {
-    label: "报警提示",
-    value: "alarmdes",
-    className: "hidden md:table-cell",
-  },
-];
 
-const RtdataTable = ({ searchParams, rtdata }: Props) => {
+const RtdataTable = ({ searchParams, where, orderBy }: Props) => {
+  const [rtdatas, setRtdatas] = useState<rtdata[]>([]);
+  const [refreshToken, setRefreshToken] = useState(Math.random());
+  useEffect(() => {
+    getRtTableData(where, orderBy)
+      .then((res) => {
+        if (!res) return;
+        setRtdatas(res);
+      })
+      .catch(() => {})
+      .finally(() => {
+        setTimeout(() => setRefreshToken(Math.random()), 3000);
+      });
+  }, [refreshToken]);
+
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -102,7 +65,7 @@ const RtdataTable = ({ searchParams, rtdata }: Props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {rtdata.map((row) => (
+        {rtdatas.map((row) => (
           <Table.Row key={row.id}>
             <Table.Cell>
               <div className="hidden md:table-cell">{row.rtu_address}</div>

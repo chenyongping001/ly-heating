@@ -1,22 +1,37 @@
-import { Badge, Card, Flex, Grid, Text } from "@radix-ui/themes";
-interface Props {
-  rtFlowReal: number;
-  rtFlowPeakToday: number;
-  rtFlowPeakTodayAt: string;
-  rtFlowPeakYesterday: number;
-  rtFlowPeakYesterdayAt: string;
-  accumulationDay: number;
-  accumulationYesterday: number;
-}
-const RtdataSummary = ({
-  rtFlowReal,
-  rtFlowPeakToday,
-  rtFlowPeakTodayAt,
-  rtFlowPeakYesterday,
-  rtFlowPeakYesterdayAt,
-  accumulationDay,
-  accumulationYesterday,
-}: Props) => {
+"use client";
+
+import { Card, Flex, Grid, Text } from "@radix-ui/themes";
+import { useEffect, useState } from "react";
+import { getRtSummaryData } from "../actions";
+
+const RtdataSummary = () => {
+  const [rtFlowReal, setRtFlowReal] = useState(0);
+  const [rtFlowPeakToday, setRtFlowPeakToday] = useState(0);
+  const [rtFlowPeakTodayAt, setRtFlowPeakTodayAt] = useState("");
+  const [rtFlowPeakYesterday, setRtFlowPeakYesterday] = useState(0);
+  const [rtFlowPeakYesterdayAt, setRtFlowPeakYesterdayAt] = useState("");
+  const [accumulationDay, setAccumulationDay] = useState(0);
+  const [accumulationYesterday, setAccumulationYesterday] = useState(0);
+  const [refreshToken, setRefreshToken] = useState(Math.random());
+
+  useEffect(() => {
+    getRtSummaryData()
+      .then((res) => {
+        if (!res) return;
+        setRtFlowReal(res.rtFlowReal);
+        setRtFlowPeakToday(res.rtFlowPeakToday);
+        setRtFlowPeakTodayAt(res.rtFlowPeakTodayAt);
+        setRtFlowPeakYesterday(res.rtFlowPeakYesterday);
+        setRtFlowPeakYesterdayAt(res.rtFlowPeakYesterdayAt);
+        setAccumulationDay(res.accumulationDay);
+        setAccumulationYesterday(res.accumulationYesterday);
+      })
+      .catch(() => {})
+      .finally(() => {
+        setTimeout(() => setRefreshToken(Math.random()), 2000);
+      });
+  }, [refreshToken]);
+
   const containers: {
     label: string;
     value: number;
