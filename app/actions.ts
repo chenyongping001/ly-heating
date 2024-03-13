@@ -7,26 +7,27 @@ const whereTotalUser = {
     user_type: { equals: 1 },
 };
 
-const today = {
-    gte: new Date(
-        new Date(+new Date() + 8 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
-    ),
-    lte: new Date(
-        new Date(+new Date() + 8 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
-    ),
-};
-const yesterday = {
-    gte: new Date(
-        new Date(+new Date() - 16 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
-    ),
-    lte: new Date(
-        new Date(+new Date() - 16 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
-    ),
-};
+
 
 
 
 export async function getRtSummaryData() {
+    const today = {
+        gte: new Date(
+            new Date(+new Date() + 8 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
+        ),
+        lte: new Date(
+            new Date(+new Date() + 8 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
+        ),
+    };
+    const yesterday = {
+        gte: new Date(
+            new Date(+new Date() - 16 * 3600 * 1000).setUTCHours(0, 0, 0, 0)
+        ),
+        lte: new Date(
+            new Date(+new Date() - 16 * 3600 * 1000).setUTCHours(23, 59, 59, 999)
+        ),
+    };
     let rtFlowSum, accumulationDaySum, accumulationYesterday, rtFlowPeakYesterday, rtFlowPeakToday;
     try {
         rtFlowSum = await prisma.rtdata.aggregate({
@@ -73,17 +74,17 @@ export async function getRtSummaryData() {
     }
 }
 
-export async function getRtTableData(where:any,orderBy:any) {
+export async function getRtTableData(where: any, orderBy: any) {
     let rtdatas;
     try {
         rtdatas = await prisma.rtdata.findMany({
-          where,
-          orderBy,
+            where,
+            orderBy,
         })
-        
+
     } catch (error) {
         return null;
     }
     return rtdatas;
-    
+
 }
