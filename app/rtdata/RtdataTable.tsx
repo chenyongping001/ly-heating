@@ -74,7 +74,7 @@ const RtdataTable = ({ searchParams, where, orderBy }: Props) => {
               </div>
               <div className="flex md:hidden gap-1">
                 {row.rtu_address}
-                <StatusBadge label={row.alarmdes} status={row.comm_status} />
+                <StatusBadge label={row.alarmdes} status={row.user_status} />
               </div>
 
               <div className="block md:hidden mt-1">
@@ -146,7 +146,7 @@ const RtdataTable = ({ searchParams, where, orderBy }: Props) => {
               </Text>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              <StatusBadge label={row.alarmdes} status={row.comm_status} />
+              <StatusBadge label={row.alarmdes} status={row.user_status} />
             </Table.Cell>
           </Table.Row>
         ))}

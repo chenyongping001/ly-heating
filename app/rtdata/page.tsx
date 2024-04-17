@@ -25,7 +25,7 @@ const Rtdatapage = async ({ searchParams }: Props) => {
   const { status = "ALL", group = "ALL", search = "" } = searchParams;
   const where = {
     rtu_address: { lt: 600 },
-    comm_status:
+    user_status:
       status === "ALL"
         ? { gte: 0 }
         : parseInt(status) < 2
@@ -52,7 +52,12 @@ const Rtdatapage = async ({ searchParams }: Props) => {
     .map((column) => column.value)
     .includes(searchParams.orderBy)
     ? { [searchParams.orderBy]: searchParams.type }
-    : undefined;
+    : [
+        { group_id: "asc" },
+        { user_type: "asc" },
+        { user_status: "asc" },
+        { user_id: "asc" },
+      ];
 
   return (
     <Flex direction={"column"} gap={"2"}>
