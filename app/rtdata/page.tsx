@@ -56,7 +56,7 @@ const Rtdatapage = async ({ searchParams }: Props) => {
         { group_id: "asc" },
         { user_type: "asc" },
         { user_status: "asc" },
-        { user_id: "asc" },
+        { rtu_address: "asc" },
       ];
 
   return (
